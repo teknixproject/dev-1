@@ -23,10 +23,10 @@ const GridSystemContainer = dynamic(() => import('@/components/grid-systems'), {
   loading: () => <LoadingPage />,
   ssr: false,
 });
-const SandPackUI = dynamic(() => import('./preview-ui'), {
-  loading: () => <LoadingPage />,
-  ssr: false,
-});
+// const SandPackUI = dynamic(() => import('./preview-ui'), {
+//   loading: () => <LoadingPage />,
+//   ssr: false,
+// });
 const LoadingPage = dynamic(() => import('./loadingPage'), {
   ssr: false,
 });

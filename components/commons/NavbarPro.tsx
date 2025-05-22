@@ -99,7 +99,7 @@ export default function ChartWithDataTable() {
   ];
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 w-full">
       <div className="w-full max-w-4xl bg-white p-8 rounded-lg shadow-xl">
         <div className="h-64 mb-6">
           <Bar data={data} options={options} />

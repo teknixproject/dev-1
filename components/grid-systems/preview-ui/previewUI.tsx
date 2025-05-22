@@ -73,7 +73,7 @@ const DynamicComponent: React.FC<DynamicComponentProps> = ({ dataPreviewUI }) =>
   }
 
   return (
-    <div className="component-preview-container">
+    <div className="w-full flex justify-center component-preview-container">
       <Component />
     </div>
   );
