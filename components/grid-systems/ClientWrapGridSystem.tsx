@@ -15,6 +15,7 @@ import { actionsStore } from '@/stores/actions';
 import { stateManagementStore } from '@/stores/stateManagement';
 import { TTypeSelect, TTypeSelectState } from '@/types';
 import { BrowserRouter } from 'react-router-dom';
+import DynamicComponent from './preview-ui/previewUI';
 
 type DeviceType = 'mobile' | 'desktop';
 
@@ -328,44 +329,47 @@ const PreviewUI = (props: any) => {
   }
 
   return (
-    <div className="component-preview-container">
-      {isPage ? (
-        <div className="relative flex flex-col justify-between min-h-screen">
-          {!_.isEmpty(selectedHeaderLayout) && (
-            <GridSystemContainer
-              isLoading={isLoading}
-              {...props}
-              page={selectedHeaderLayout || {}}
-              deviceType={deviceType}
-              isHeader
-            />
-          )}
+    <BrowserRouter>
+      <div className="component-preview-container">
+        {isPage ? (
+          <div className="relative flex flex-col justify-between min-h-screen">
+            {!_.isEmpty(selectedHeaderLayout) && (
+              <GridSystemContainer
+                isLoading={isLoading}
+                {...props}
+                page={selectedHeaderLayout || {}}
+                deviceType={deviceType}
+                isHeader
+              />
+            )}
 
-          {!_.isEmpty(selectedBodyLayout) ? (
-            <GridSystemContainer
-              isLoading={isLoading}
-              {...props}
-              page={selectedBodyLayout || {}}
-              deviceType={deviceType}
-              isBody
-            />
-          ) : (
-            <div className="h-[300px]" />
-          )}
+            {!_.isEmpty(selectedBodyLayout) ? (
+              <GridSystemContainer
+                isLoading={isLoading}
+                {...props}
+                page={selectedBodyLayout || {}}
+                deviceType={deviceType}
+                isBody
+              />
+            ) : (
+              <div className="h-[300px]" />
+            )}
 
-          {!_.isEmpty(selectedFooterLayout) && (
-            <GridSystemContainer
-              isLoading={isLoading}
-              {...props}
-              page={selectedFooterLayout || {}}
-              deviceType={deviceType}
-              isFooter
-            />
-          )}
-        </div>
-      ) : (
-        <SandPackUI dataPreviewUI={dataPreviewUI || dataPreviewUI?.data} />
-      )}
-    </div>
+            {!_.isEmpty(selectedFooterLayout) && (
+              <GridSystemContainer
+                isLoading={isLoading}
+                {...props}
+                page={selectedFooterLayout || {}}
+                deviceType={deviceType}
+                isFooter
+              />
+            )}
+          </div>
+        ) : (
+          // <SandPackUI dataPreviewUI={dataPreviewUI || dataPreviewUI?.data} />
+          <DynamicComponent dataPreviewUI={dataPreviewUI || dataPreviewUI?.data}  />
+        )}
+      </div>
+    </BrowserRouter>
   );
 };
