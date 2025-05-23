@@ -1,83 +1,38 @@
-// components/preview-ui.tsx
-'use client';
+'use client'; // Mark as client-only component
 
+import LoadingPage from '../loadingPage';
 import dynamic from 'next/dynamic';
-import React, { useEffect, useState, useMemo } from 'react';
 
-const Babel = dynamic(() => import('@babel/standalone'), { ssr: false });
-
-interface DynamicComponentProps {
-  dataPreviewUI: {
-    code: string; // Chuỗi mã của component
-    [key: string]: any;
-  };
+interface PreviewUIProps {
+  customWidgetName: string | null;
 }
 
-const DynamicComponent: React.FC<DynamicComponentProps> = ({ dataPreviewUI }) => {
-  const [Component, setComponent] = useState<React.ComponentType | null>(null);
-  const [error, setError] = useState<string | null>(null);
+const DynamicComponent = ({ customWidgetName }: PreviewUIProps) => {
+  console.log('PreviewUI', customWidgetName);
 
-  const match = dataPreviewUI.code.match(/export default (\w+)/);
-  const componentName = match ? match[1] : 'App';
-
-  const compiledCode = useMemo(() => {
-    if (!dataPreviewUI?.code) {
-      setError('No component code provided');
-      return null;
-    }
-
-    // Kiểm tra cơ bản để đảm bảo mã hợp lệ
-    if (!dataPreviewUI.code.includes('export default')) {
-      setError('Component code must have a default export');
-      return null;
-    }
-
-    try {
-      const transformedCode = Babel.transform(dataPreviewUI.code, {
-        presets: ['react', 'typescript'],
-        filename: 'App.tsx',
-      }).code;
-      return transformedCode;
-    } catch (err) {
-      setError('Failed to compile component: ' + err.message);
-      return null;
-    }
-  }, [dataPreviewUI?.code]);
-
-  useEffect(() => {
-    if (!compiledCode) return;
-
-    try {
-      const mod: { exports: any } = { exports: {} };
-      const fn = new Function(componentName, compiledCode);
-      fn(mod, mod.exports, React);
-
-      const CompiledComponent = mod.exports.default || mod.exports;
-
-      if (!CompiledComponent) {
-        setError('No default export found in the component code');
-        return;
-      }
-
-      setComponent(() => CompiledComponent);
-      setError(null);
-    } catch (err) {
-      console.error('Error executing component:', err);
-      setError('Failed to execute component: ' + err.message);
-    }
-  }, [compiledCode]);
-
-  if (error) {
-    return <div className="text-red-500">{error}</div>;
+  // Fallback if customWidgetName is invalid
+  if (!customWidgetName || typeof customWidgetName !== 'string') {
+    return <div>Invalid widget name</div>;
   }
 
-  if (!Component) {
-    return <div>Loading component...</div>;
-  }
+  // Dynamic import with error handling
+  const CustomWidget = dynamic(
+    () =>
+      import(`@/components/commons/${customWidgetName}`).catch((error) => {
+        console.error(`Failed to load component ${customWidgetName}:`, error);
+        const ErrorComponent = () => <div>Error loading component</div>;
+        ErrorComponent.displayName = 'ErrorComponent';
+        return ErrorComponent;
+      }),
+    {
+      loading: () => <LoadingPage />,
+      ssr: false, // Disable SSR to avoid hydration issues
+    }
+  );
 
   return (
-    <div className="w-full flex justify-center component-preview-container">
-      <Component />
+    <div>
+      <CustomWidget />
     </div>
   );
 };
