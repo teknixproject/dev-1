@@ -213,6 +213,7 @@ const PreviewUI = (props: any) => {
   const projectId = searchParams.get('projectId');
   const sectionName = searchParams.get('sectionName');
   const userId = searchParams.get('userId');
+  const customWidgetName = searchParams.get('customWidgetName');
 
   //#region store
   const { setData } = layoutStore();
@@ -327,12 +328,11 @@ const PreviewUI = (props: any) => {
   if (isLoading) {
     return <LoadingPage />;
   }
-  console.log('sssssss');
-  
+
   return (
-    <BrowserRouter>
+    <>
       <div className="component-preview-container">
-        {isPage ? (
+        {isPage && !customWidgetName ? (
           <div className="relative flex flex-col justify-between min-h-screen">
             {!_.isEmpty(selectedHeaderLayout) && (
               <GridSystemContainer
@@ -367,10 +367,11 @@ const PreviewUI = (props: any) => {
             )}
           </div>
         ) : (
-          // <SandPackUI dataPreviewUI={dataPreviewUI || dataPreviewUI?.data} />
-          <DynamicComponent dataPreviewUI={dataPreviewUI || dataPreviewUI?.data} />
+          <>
+            <DynamicComponent customWidgetName={customWidgetName} />
+          </>
         )}
       </div>
-    </BrowserRouter>
+    </>
   );
 };
