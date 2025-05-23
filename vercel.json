@@ -2,7 +2,16 @@
   "git": {
     "deploymentEnabled": {
       "main": true,
-      "validate/*": true
+      "validate/*": true,
+      "*": false
     }
-  }
+  },
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/node",
+      "config": { "includeFiles": ["dist/**"] }
+    }
+  ],
+  "cache": ["node_modules/**", ".next/**"]
 }
