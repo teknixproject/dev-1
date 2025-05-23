@@ -327,7 +327,8 @@ const PreviewUI = (props: any) => {
   if (isLoading) {
     return <LoadingPage />;
   }
-
+  console.log('sssssss');
+  
   return (
     <BrowserRouter>
       <div className="component-preview-container">
@@ -367,7 +368,7 @@ const PreviewUI = (props: any) => {
           </div>
         ) : (
           // <SandPackUI dataPreviewUI={dataPreviewUI || dataPreviewUI?.data} />
-          <DynamicComponent dataPreviewUI={dataPreviewUI || dataPreviewUI?.data}  />
+          <DynamicComponent dataPreviewUI={dataPreviewUI || dataPreviewUI?.data} />
         )}
       </div>
     </BrowserRouter>

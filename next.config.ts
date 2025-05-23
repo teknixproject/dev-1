@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=31536000, must-revalidate', // Giảm max-age
+            value: 'public, max-age=31536000, must-revalidate',
           },
         ],
       },
@@ -25,10 +25,9 @@ const nextConfig: NextConfig = {
   },
   webpack(config, { dev }) {
     if (dev) {
-      // Bỏ config.cache = false để sử dụng cache mặc định của Webpack
       config.optimization = {
         ...config.optimization,
-        runtimeChunk: false, // Giữ nguyên để tránh lỗi runtime
+        runtimeChunk: false,
       };
     }
     return config;
@@ -38,6 +37,11 @@ const nextConfig: NextConfig = {
   },
   compiler: {
     styledComponents: true,
+  },
+  experimental: {
+    turbo: {
+      disabled: true, // Tắt Turbopack rõ ràng
+    },
   },
 };
 

@@ -17,6 +17,9 @@ const DynamicComponent: React.FC<DynamicComponentProps> = ({ dataPreviewUI }) =>
   const [Component, setComponent] = useState<React.ComponentType | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const match = dataPreviewUI.code.match(/export default (\w+)/);
+  const componentName = match ? match[1] : 'App';
+
   const compiledCode = useMemo(() => {
     if (!dataPreviewUI?.code) {
       setError('No component code provided');
@@ -45,11 +48,11 @@ const DynamicComponent: React.FC<DynamicComponentProps> = ({ dataPreviewUI }) =>
     if (!compiledCode) return;
 
     try {
-      const module: { exports: any } = { exports: {} };
-      const fn = new Function('module', 'exports', 'React', compiledCode);
-      fn(module, module.exports, React);
+      const mod: { exports: any } = { exports: {} };
+      const fn = new Function(componentName, compiledCode);
+      fn(mod, mod.exports, React);
 
-      const CompiledComponent = module.exports.default || module.exports;
+      const CompiledComponent = mod.exports.default || mod.exports;
 
       if (!CompiledComponent) {
         setError('No default export found in the component code');

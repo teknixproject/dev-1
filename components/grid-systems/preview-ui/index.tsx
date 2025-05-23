@@ -9,19 +9,6 @@ import {
 import _ from 'lodash';
 import React, { useEffect, useMemo, useRef } from 'react';
 
-// function extractDependencies(code: string): Record<string, string> {
-//   const importRegex = /import\s+.*?\s+from\s+['"]([^'"]+)['"]/g;
-//   const dependencies: Record<string, string> = {};
-//   let match;
-//   while ((match = importRegex.exec(code)) !== null) {
-//     const library = match[1];
-//     if (!['react', 'react-dom', 'next'].includes(library)) {
-//       dependencies[library] = 'latest';
-//     }
-//   }
-//   return dependencies;
-// }
-
 function extractDependencies(code: string): Record<string, string> {
   const importRegex = /import\s+.*?\s+from\s+['"]([^'"]+)['"]/g;
   const dependencies: Record<string, string> = {};
@@ -50,8 +37,6 @@ const SandPackUI = ({ dataPreviewUI }: SandPackUIProps) => {
     const code = _.get(dataPreviewUI, 'previewData', '');
     return extractDependencies(code);
   }, [dataPreviewUI]);
-
-  console.log('dynamicDependencies', _.get(dataPreviewUI, 'previewData', ''));
 
   useEffect(() => {
     const iframe = previewRef.current?.querySelector('iframe');
